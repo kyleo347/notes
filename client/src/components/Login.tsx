@@ -30,7 +30,7 @@ class ConnectedLogin extends Component<any,User> {
     
     componentWillReceiveProps(nextProps: any) {
         if (nextProps.authenticated) {
-            this.props.router.push('/');
+            this.props.history.push('/');
         }
     }
 

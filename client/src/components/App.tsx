@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { Grid, Row, Col, Jumbotron, Button } from "react-bootstrap";
+import { Grid, Row, Col, Button, Well } from "react-bootstrap";
 import NoteList from "./NoteList";
 import NoteForm from "./NoteDetail";
 import { AppState } from "../model/AppState";
 import { Note } from "../model/Note";
 import { connect } from "react-redux";
-import { getAllNotes } from "../actions/actions";
+import { getAllNotes, loggedIn } from "../actions/actions";
 import { Link } from "react-router-dom";
 
 const mapStateToProps = (state: AppState) => {
@@ -32,12 +32,20 @@ class ConnectedApp extends Component<any, Note> {
     render() {
         if (!this.props.authenticated) {
             return (
-                <Jumbotron>
-                    <h4>Please Log in to see your notes</h4>
-                    <Link to="/login">
-                        <Button bsClass="primary">Log In</Button>
-                    </Link>
-                </Jumbotron>
+                <Grid>
+                    <Row>
+                        <Col md={1}></Col>
+                        <Col md={10}>
+                            <Well className="m-5">
+                                <h4>Please Log in to see your notes</h4>
+                                <Link to="/login">
+                                    <Button bsStyle="primary">Log In</Button>
+                                </Link>
+                            </Well>
+                        </Col>
+                        <Col md={1}></Col>
+                    </Row>
+                </Grid>
             )
         }
         let noteForm = () => {
@@ -46,16 +54,16 @@ class ConnectedApp extends Component<any, Note> {
             }
         }
         return (
-                <Grid >
-                    <Row>
-                        <Col md={6}>
-                            <NoteList></NoteList>
-                        </Col>
-                        <Col md={6}>
-                            {noteForm()}
-                        </Col>
-                    </Row>
-                </Grid>
+            <Grid >
+                <Row>
+                    <Col md={6}>
+                        <NoteList></NoteList>
+                    </Col>
+                    <Col md={6}>
+                        {noteForm()}
+                    </Col>
+                </Row>
+            </Grid>
         );
     }
 }

@@ -15,9 +15,12 @@ export class NoteService {
     }
 
     static add(note: Note) {
+        const headers = new Headers;
+        headers.append('user', localStorage.getItem('user') as string);
+        headers.append('Content-Type', 'application/json');
         const requestOptions = {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: headers,
             body: JSON.stringify(note)
         };
     
@@ -25,12 +28,12 @@ export class NoteService {
     }
 
     static update(note: Note) {
+        const headers = new Headers;
+        headers.append('user', localStorage.getItem('user') as string);
+        headers.append('Content-Type', 'application/json');
         const requestOptions = {
             method: 'PUT',
-            headers: { 
-                // ...authHeader(),
-                'Content-Type': 'application/json' 
-            },
+            headers: headers,
             body: JSON.stringify(note)
         };
     

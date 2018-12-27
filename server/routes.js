@@ -21,10 +21,12 @@ const {
 router.get('/note', (req, res) => {
     const token = req.headers.user;
     const user = jwt.verify(token, auth.secret);
-    User.find(user, (error, users) => {
+    User.findById(user.id, (error, user) => {
         let query = {};
-        if (users.length) {
-            query = { userId: users[0]._id };
+        if (user && user.id) {
+            query = {
+                userId: user.id
+            };
         }
         Note.find(query, (err, docs) => {
             if (err) {
@@ -44,18 +46,25 @@ router.get('/note', (req, res) => {
 // this method overwrites existing data in our database
 router.put('/note', (req, res) => {
     const note = req.body;
-    Note.findOneAndUpdate(note.id, note, {
-        new: true
-    }, (err, doc) => {
-        if (err) {
-            return res.json({
-                success: false,
-                error: err
-            });
+    const token = req.headers.user;
+    const user = jwt.verify(token, auth.secret);
+    User.findById(user.id, (error, user) => {
+        if (user && user.id) {
+            note.userId = user.id;
         }
-        return res.json({
-            success: true,
-            note: doc
+        Note.findOneAndUpdate(note.id, note, {
+            new: true
+        }, (err, doc) => {
+            if (err) {
+                return res.json({
+                    success: false,
+                    error: err
+                });
+            }
+            return res.json({
+                success: true,
+                note: doc
+            });
         });
     });
 });
@@ -79,25 +88,30 @@ router.delete('/note', (req, res) => {
 router.post('/note', (req, res) => {
     const note = new Note();
     Object.assign(note, req.body);
-    //   const { id, title, text } = req.body;
     if ((!note.id && note.id !== 0) || !note.title) {
         return res.json({
             success: false,
             error: 'INVALID INPUTS',
         });
     }
-    //   note.title = title;
-    //   note.id = id;
-    note.save((err, doc) => {
-        if (err) {
-            return res.json({
-                success: false,
-                error: err
-            });
+
+    const token = req.headers.user;
+    const user = jwt.verify(token, auth.secret);
+    User.findById(user.id, (error, user) => {
+        if (user && user.id) {
+            note.userId = user.id;
         }
-        return res.json({
-            success: true,
-            note: doc
+        note.save((err, doc) => {
+            if (err) {
+                return res.json({
+                    success: false,
+                    error: err
+                });
+            }
+            return res.json({
+                success: true,
+                note: doc
+            });
         });
     });
 });
@@ -106,7 +120,7 @@ router.post('/register', (req, res) => {
     try {
         User.register(new User({
             username: req.body.username
-        }), req.body.password, (err) => {
+        }), req.body.password, (err,user) => {
             if (err) {
                 return res.status(500).send(`An error occurred: ${err}`);
             }
@@ -116,7 +130,14 @@ router.post('/register', (req, res) => {
                     session: false,
                 }
             )(req, res, () => {
-                res.status(200).send('Successfully created new account');
+                const token = jwt.sign({
+                    id: user.id,
+                    email: user.username
+                }, auth.secret);
+                res.json({
+                    message: 'Successfully created new account',
+                    token
+                });
             });
         });
     } catch (err) {

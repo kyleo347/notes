@@ -109,8 +109,8 @@ export function register(payload: User) {
         dispatch({ type: ACTIONS.REGISTER_REQUEST });
         UserService.register(payload)
             .then(result => {
-                localStorage.setItem('user', result.data.token);
-                dispatch(registered())
+                // localStorage.setItem('user', result.token);
+                dispatch(registered());
             })
             .catch( err => dispatch(authFailure()));
     }

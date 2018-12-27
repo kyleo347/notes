@@ -2,24 +2,34 @@ import React, { Component } from "react";
 import { Navbar, Nav, NavItem, Button } from "react-bootstrap";
 import styles from  "../css/NoteNavbar.module.css";
 import { AppState } from "../model/AppState";
-import { logout } from "../actions/actions";
+import { logout, loggedIn, getAllNotes } from "../actions/actions";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 
 const mapStateToProps = (state: AppState) => {
     return {
-        authenticated: state.authenticated
+        authenticated: state.authenticated,
     }
 };
 
 function mapDispatchToProps(dispatch: Function) {
     return {
-        logout: () => dispatch(logout())
+        logout: () => dispatch(logout()),
+        loggedIn: () => dispatch(loggedIn()),
+        getAllNotes: () => dispatch(getAllNotes())
     };
 }
 
 export class ConnectedNavbar extends Component<any,any> {
+
+    componentDidMount() {
+        if (localStorage.getItem('user')) {
+            this.props.loggedIn();
+            this.props.getAllNotes();
+        }
+    }
+
     render() {
         let authButtons = 
         <Nav pullRight>
@@ -29,7 +39,7 @@ export class ConnectedNavbar extends Component<any,any> {
                 </Link>
             </NavItem>;
             
-            <NavItem eventKey={2}>
+            <NavItem eventKey={2} >
                 <Link to="/register">
                 <Button >Register</Button>
                 </Link>

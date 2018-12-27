@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { FormGroup, FormControl, ControlLabel, Form, Alert } from 'react-bootstrap';
+import { FormGroup, FormControl, ControlLabel, Alert } from 'react-bootstrap';
 import { register } from '../actions/actions';
 import { User } from '../model/User';
 import { connect } from 'react-redux';
@@ -33,12 +33,6 @@ class ConnectedRegister extends Component<any,State> {
             password: '',
             passwordVerify: '',
         };
-    }
-
-    componentWillReceiveProps(nextProps: any) {
-        if (nextProps.registered) {
-            this.props.router.push('/');
-        }
     }
 
     onChange = (e: any) => {
