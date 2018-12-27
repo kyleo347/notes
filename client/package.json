@@ -6,10 +6,17 @@
     "@types/jest": "23.3.10",
     "@types/node": "10.12.15",
     "@types/react": "16.7.17",
+    "@types/react-bootstrap": "^0.32.15",
     "@types/react-dom": "16.0.11",
+    "@types/react-redux": "^6.0.11",
+    "@types/react-router-dom": "^4.3.1",
+    "bootstrap": "^3.4.0",
     "react": "^16.6.3",
+    "react-bootstrap": "^0.32.4",
     "react-dom": "^16.6.3",
+    "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.1",
+    "redux-thunk": "^2.3.0",
     "typescript": "3.2.2"
   },
   "scripts": {
@@ -26,5 +33,10 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "@types/uuid": "^3.4.4",
+    "react-redux": "^6.0.0",
+    "redux": "^4.0.1"
+  }
 }
