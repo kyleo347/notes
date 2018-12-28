@@ -29,12 +29,13 @@ export class NoteService {
 
     static update(note: Note) {
         const headers = new Headers;
+        const updateNote = {...note, _id: undefined};
         headers.append('user', localStorage.getItem('user') as string);
         headers.append('Content-Type', 'application/json');
         const requestOptions = {
             method: 'PUT',
             headers: headers,
-            body: JSON.stringify(note)
+            body: JSON.stringify(updateNote)
         };
     
         return fetch(`${this.apiUrl}/note/`, requestOptions).then(this.handleResponse);;

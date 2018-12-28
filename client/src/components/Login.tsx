@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { FormGroup, FormControl, ControlLabel, Form } from 'react-bootstrap';
-import { login } from '../actions/actions';
+import { login } from '../actions/user-actions';
 import { User } from '../model/User';
 import { connect } from 'react-redux';
 // import { withRouter } from 'react-router';
@@ -9,7 +9,7 @@ import { AppState } from '../model/AppState';
 
 const mapStateToProps = (state: AppState) => {
     return {
-        authenticated: state.authenticated
+        authenticated: state.user.authenticated
     }
 };
 
@@ -52,11 +52,11 @@ class ConnectedLogin extends Component<any,User> {
                 <form className="form-signin" onSubmit={this.onSubmit}>
                     <h2 className="form-signin-heading">Please sign in</h2>
                     <FormGroup controlId="username">
-                        <ControlLabel htmlFor="inputEmail" className="sr-only">Email address</ControlLabel>
+                        <ControlLabel className="sr-only">Email address</ControlLabel>
                         <FormControl type="email" className="form-control" placeholder="Email address" name="username" value={username} onChange={this.onChange} required />
                     </FormGroup>
                     <FormGroup controlId="password">
-                        <ControlLabel htmlFor="inputPassword" className="sr-only">Password</ControlLabel>
+                        <ControlLabel className="sr-only">Password</ControlLabel>
                         <FormControl type="password" className="form-control" placeholder="Password" name="password" value={password} onChange={this.onChange} required />
                     </FormGroup>
                     <button className="btn  btn-primary btn-block" type="submit">Login</button>

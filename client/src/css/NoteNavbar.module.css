@@ -1,4 +1,9 @@
-
 .note-navbar {
-    border-radius: 0 !important;
-  }
+  border-radius: 0 !important;
+}
+
+.buttons {
+  padding: 15px;
+  display: inline-block;
+  line-height: 20px;
+}

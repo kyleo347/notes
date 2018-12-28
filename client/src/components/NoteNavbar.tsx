@@ -2,14 +2,15 @@ import React, { Component } from "react";
 import { Navbar, Nav, NavItem, Button } from "react-bootstrap";
 import styles from  "../css/NoteNavbar.module.css";
 import { AppState } from "../model/AppState";
-import { logout, loggedIn, getAllNotes } from "../actions/actions";
+import { logout, loggedIn } from "../actions/user-actions";
+import { getAllNotes } from "../actions/note-actions";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 
 const mapStateToProps = (state: AppState) => {
     return {
-        authenticated: state.authenticated,
+        authenticated: state.user.authenticated,
     }
 };
 
@@ -33,13 +34,13 @@ export class ConnectedNavbar extends Component<any,any> {
     render() {
         let authButtons = 
         <Nav pullRight>
-            <NavItem eventKey={1} >
+            <NavItem eventKey={1} componentClass="span" className={styles['buttons']}>
                 <Link to="/login" >
                     <Button bsStyle="primary">Login</Button>
                 </Link>
             </NavItem>;
             
-            <NavItem eventKey={2} >
+            <NavItem eventKey={2} componentClass="span" className={styles['buttons']}>
                 <Link to="/register">
                 <Button >Register</Button>
                 </Link>
@@ -47,7 +48,7 @@ export class ConnectedNavbar extends Component<any,any> {
         </Nav>
         if (this.props.authenticated) {
             authButtons = <Nav pullRight>
-                            <NavItem eventKey={1} onClick={this.props.logout}>
+                            <NavItem eventKey={1} onClick={this.props.logout}  componentClass="span" className={styles['buttons']}>
                                 <Button>Log out</Button>
                             </NavItem>
                         </Nav>

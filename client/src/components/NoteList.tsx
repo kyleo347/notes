@@ -3,12 +3,12 @@ import { connect } from "react-redux";
 import { Note } from "../model/Note";
 import { Nav, NavItem } from "react-bootstrap";
 import { AppState } from "../model/AppState";
-import { selectNote } from "../actions/actions";
+import { selectNote } from "../actions/note-actions";
 
 const mapStateToProps = (state: AppState) => {
     return {
-        notes: state.notes,
-        selected: state.selected
+        notes: state.notes.data,
+        selected: state.notes.selected
     };
 };
 
@@ -33,7 +33,7 @@ class ConnectedList extends Component<any, AppState> {
     handleSelect(key: any) {
         let note = new Note;
         for (let i = 0; i < this.props.notes.length; i++) {
-            if (this.props.notes[i].id === key) {
+            if (this.props.notes[i]._id === key) {
                 note = this.props.notes[i];
                 break;
             }            
@@ -43,9 +43,9 @@ class ConnectedList extends Component<any, AppState> {
 
     render() {
         return (
-            <Nav bsStyle="pills" stacked activeKey={this.props.selected ? this.props.selected.id : 'new'}>
+            <Nav bsStyle="pills" stacked activeKey={this.props.selected ? this.props.selected._id : 'new'}>
                 {this.props.notes.map((note: Note) => (
-                    <NavItem eventKey={note.id} key={note.id} onSelect={this.handleSelect}>
+                    <NavItem eventKey={note._id} key={note._id} onSelect={this.handleSelect}>
                         {note.title}
                     </NavItem>
                 ))}

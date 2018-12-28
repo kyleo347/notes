@@ -6,7 +6,6 @@ const passportLocalMongoose = require('passport-local-mongoose');
 // this will be our data base's data structure
 const NoteSchema = new Schema(
   {
-    id: String,
     userId: String,
     title: String,
     text: String,

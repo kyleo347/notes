@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { FormGroup, FormControl, ControlLabel, Alert } from 'react-bootstrap';
-import { register } from '../actions/actions';
+import { register } from '../actions/user-actions';
 import { User } from '../model/User';
 import { connect } from 'react-redux';
 import { AppState } from '../model/AppState';
 
 const mapStateToProps = (state: AppState) => {
     return {
-        registered: state.registered
+        registered: state.user.registered
     }
 };
 
@@ -61,15 +61,15 @@ class ConnectedRegister extends Component<any,State> {
                 <form className="form-register" onSubmit={this.onSubmit}>
                     <h2 className="form-register-heading">Please sign in</h2>
                     <FormGroup controlId="username">
-                        <ControlLabel htmlFor="inputEmail" className="sr-only">Email address</ControlLabel>
+                        <ControlLabel className="sr-only">Email address</ControlLabel>
                         <FormControl type="email" className="form-control" placeholder="Email address" name="username" value={this.state.username} onChange={this.onChange} required />
                     </FormGroup>
                     <FormGroup controlId="password">
-                        <ControlLabel htmlFor="inputPassword" className="sr-only">Password</ControlLabel>
+                        <ControlLabel className="sr-only">Password</ControlLabel>
                         <FormControl type="password" className="form-control" placeholder="Password" name="password" value={this.state.password} onChange={this.onChange} required />
                     </FormGroup>
                     <FormGroup controlId="passwordVerify">
-                        <ControlLabel htmlFor="inputVerify" className="sr-only">Verify</ControlLabel>
+                        <ControlLabel className="sr-only">Verify</ControlLabel>
                         <FormControl type="password" className="form-control" placeholder="Verify Password" name="passwordVerify" value={this.state.passwordVerify} onChange={this.onChange} required />
                     </FormGroup>
                     <Alert bsStyle="danger" hidden={match}>Passwords must match</Alert>

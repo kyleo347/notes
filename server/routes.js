@@ -88,7 +88,7 @@ router.delete('/note', (req, res) => {
 router.post('/note', (req, res) => {
     const note = new Note();
     Object.assign(note, req.body);
-    if ((!note.id && note.id !== 0) || !note.title) {
+    if (!note.title) {
         return res.json({
             success: false,
             error: 'INVALID INPUTS',

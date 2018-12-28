@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import uuidv1 from "uuid";
-import { editNote, addNote } from "../actions/actions";
+import { editNote, addNote } from "../actions/note-actions";
 import { Note } from "../model/Note";
 import { AppState } from "../model/AppState";
-import { FormGroup, ControlLabel, FormControl } from "react-bootstrap";
+import { FormGroup, ControlLabel, FormControl, Alert } from "react-bootstrap";
 
 const mapStateToProps = (state: AppState) => {
     return {
-        note: state.selected
+        note: state.notes.selected,
+        error: state.error
     }
 };
 
@@ -42,14 +43,14 @@ class ConnectedNote extends Component<any, Note> {
 
     handleSubmit(event: any) {
         event.preventDefault();
-        if (!this.state.id || this.state.id === 'new') {
-            const id = uuidv1();
+        if (!this.state._id || this.state._id === 'new') {
+            // const id = uuidv1();
             this.props.addNote({
-                id: id,
+                // id: id,
                 title: this.state.title,
                 text: this.state.text
             });
-            this.setState({id : id})
+            // this.setState({id : id})
         } else {
             this.props.editNote(this.state);
         }
@@ -58,11 +59,12 @@ class ConnectedNote extends Component<any, Note> {
     }
 
     render() {
+        const alert = this.props.error ? <Alert><h3>{this.props.error}</h3></Alert> : ''
         return (
             <form onSubmit={this.handleSubmit}>
                 <div className="formGroup">
-                    <label htmlFor="title">Title</label>
                     <FormGroup controlId="title">
+                        <ControlLabel>Title</ControlLabel>
                         <FormControl
                             type="text"
                             value={this.state.title}
@@ -77,6 +79,7 @@ class ConnectedNote extends Component<any, Note> {
                             onChange={this.textChange} />
                     </FormGroup>
                 </div>
+                {alert}
                 <button type="submit" className="btn btn-success">
                     SAVE
                 </button>

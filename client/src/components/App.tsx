@@ -5,13 +5,14 @@ import NoteForm from "./NoteDetail";
 import { AppState } from "../model/AppState";
 import { Note } from "../model/Note";
 import { connect } from "react-redux";
-import { getAllNotes, loggedIn } from "../actions/actions";
+import { loggedIn } from "../actions/user-actions";
+import { getAllNotes } from "../actions/note-actions";
 import { Link } from "react-router-dom";
 
 const mapStateToProps = (state: AppState) => {
     return {
-        authenticated: state.authenticated,
-        selected: state.selected
+        authenticated: state.user.authenticated,
+        selected: state.notes.selected
     }
 };
 
@@ -50,7 +51,7 @@ class ConnectedApp extends Component<any, Note> {
         }
         let noteForm = () => {
             if (this.props.selected) {
-                return <NoteForm key={this.props.selected.id}></NoteForm>
+                return <NoteForm key={this.props.selected._id}></NoteForm>
             }
         }
         return (
