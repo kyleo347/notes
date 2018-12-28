@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import uuidv1 from "uuid";
-import { editNote, addNote } from "../actions/note-actions";
+import { editNote, addNote, deleteNote } from "../actions/note-actions";
 import { Note } from "../model/Note";
 import { AppState } from "../model/AppState";
-import { FormGroup, ControlLabel, FormControl, Alert } from "react-bootstrap";
+import { FormGroup, ControlLabel, FormControl, Alert, Button, Modal } from "react-bootstrap";
 
 const mapStateToProps = (state: AppState) => {
     return {
@@ -16,74 +15,99 @@ const mapStateToProps = (state: AppState) => {
 function mapDispatchToProps(dispatch: Function) {
     return {
         editNote: (note: Note) => dispatch(editNote(note)),
-        addNote: (note: Note) => dispatch(addNote(note))
+        addNote: (note: Note) => dispatch(addNote(note)),
+        deleteNote: (id: string) => dispatch(deleteNote(id))
     };
 }
 
 
-class ConnectedNote extends Component<any, Note> {
+class ConnectedNote extends Component<any, any> {
     constructor(props: any) {
         super(props);
 
-        this.state = { ...props.note };
+        this.state = { 
+            note : {...props.note} ,
+            show: false
+        };
 
-        this.titleChange = this.titleChange.bind(this);
-        this.textChange = this.textChange.bind(this);
+        this.onChange = this.onChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
+        this.handleShow = this.handleShow.bind(this);
+        this.handleClose = this.handleClose.bind(this);
     }
-
-    titleChange(event: any) {
-        this.setState({ title: event.target.value });
-    }
-
     
-    textChange(event: any) {
-        this.setState({ text: event.target.value });
+    onChange = (e : any) => {
+        const note: any = {...this.state.note};
+        note[e.target.name] = e.target.value;
+        this.setState({note: note});
     }
 
     handleSubmit(event: any) {
         event.preventDefault();
-        if (!this.state._id || this.state._id === 'new') {
-            // const id = uuidv1();
+        if (!this.state.note._id || this.state.note._id === 'new') {
             this.props.addNote({
-                // id: id,
-                title: this.state.title,
-                text: this.state.text
+                title: this.state.note.title,
+                text: this.state.note.text
             });
-            // this.setState({id : id})
         } else {
-            this.props.editNote(this.state);
+            this.props.editNote(this.state.note);
         }
-        // this.note = new Note;
-        // this.setState({ title: "" });
+    }
+
+    handleDelete(event: any) {
+        this.setState({show: false});
+        this.props.deleteNote(this.state.note._id);
+    }
+
+    handleShow(event: any) {
+        this.setState({show: true});
+    }
+
+    handleClose(event: any) {
+        this.setState({show: false});
     }
 
     render() {
-        const alert = this.props.error ? <Alert><h3>{this.props.error}</h3></Alert> : ''
+        const alert = this.props.error ? <Alert bsStyle="danger"><p>{this.props.error}</p></Alert> : ''
         return (
-            <form onSubmit={this.handleSubmit}>
-                <div className="formGroup">
-                    <FormGroup controlId="title">
-                        <ControlLabel>Title</ControlLabel>
-                        <FormControl
-                            type="text"
-                            value={this.state.title}
-                            placeholder="Enter text"
-                            onChange={this.titleChange}
-                        />
-                    </FormGroup>
-                    <FormGroup controlId="text">
-                        <ControlLabel>Note</ControlLabel>
-                        <FormControl componentClass="textarea" placeholder="content"
-                            value={this.state.text}
-                            onChange={this.textChange} />
-                    </FormGroup>
-                </div>
-                {alert}
-                <button type="submit" className="btn btn-success">
-                    SAVE
+            <div>
+                <form onSubmit={this.handleSubmit}>
+                    <div className="formGroup">
+                        <FormGroup controlId="title">
+                            <ControlLabel>Title</ControlLabel>
+                            <FormControl
+                                type="text"
+                                value={this.state.note.title}
+                                placeholder="Enter text"
+                                name="title"
+                                onChange={this.onChange}
+                            />
+                        </FormGroup>
+                        <FormGroup controlId="text">
+                            <ControlLabel>Note</ControlLabel>
+                            <FormControl componentClass="textarea" placeholder="content"
+                                name="text"
+                                value={this.state.note.text}
+                                onChange={this.onChange} />
+                        </FormGroup>
+                    </div>
+                    {alert}
+                    <button type="submit" className="btn btn-success">
+                        SAVE
                 </button>
-            </form>
+                    <Button bsStyle="danger" hidden={(!this.state.note._id || this.state.note._id === 'new')} onClick={this.handleShow}>Delete</Button>
+                </form>
+                <Modal show={this.state.show} onHide={this.handleClose}>
+                    <Modal.Header>Confirm</Modal.Header>
+                    <Modal.Body><p>Are you sure you want to delete this note?</p></Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={this.handleClose}>Cancel</Button>
+                        <Button onClick={this.handleDelete} bsStyle="danger">Delete</Button>
+                    </Modal.Footer>
+                </Modal>
+            </div>
+
         );
     }
 }

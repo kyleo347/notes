@@ -3,6 +3,8 @@ import { Action } from '../model/Action';
 import { ACTIONS } from "../constants/action-types";
 import { Note } from "../model/Note";
 import { handleError } from "./error-actions";
+
+
 export function getAllNotes() {
     return (dispatch: Function) => {
         dispatch({ type: ACTIONS.GET_NOTES_REQUEST });
@@ -57,11 +59,13 @@ export function deleteNote(payload: string) {
         dispatch({ type: ACTIONS.DELETE_NOTE_REQUEST });
         NoteService._delete(payload)
             .then(
-                res => dispatch(noteDeleted(res)), 
+                res => {
+                    dispatch(noteDeleted(payload));
+                }, 
                 error => dispatch(handleError(error.toString())));
     };
 }
-export function noteDeleted(payload: Note): Action {
+export function noteDeleted(payload: string): Action {
     return { type: ACTIONS.DELETE_NOTE, payload };
 }
 ;

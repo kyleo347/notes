@@ -19,7 +19,7 @@ export const noteReducer: Reducer =  (state: NoteState = initialState, action: A
     }
     if (action.type === ACTIONS.DELETE_NOTE) {
         return {...state,
-            data: state.data.filter((note: Note) => note !== action.payload)
+            data: state.data.filter((note: Note) => note._id !== action.payload)
         };
     }
     if (action.type === ACTIONS.EDIT_NOTE || action.type === ACTIONS.UPDATE_NOTE) {

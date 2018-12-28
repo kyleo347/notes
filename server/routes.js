@@ -70,11 +70,11 @@ router.put('/note', (req, res) => {
 });
 // this is our delete method
 // this method removes existing data in our database
-router.delete('/note', (req, res) => {
-    const {
-        id
-    } = req.body;
-    Note.findOneAndDelete(id, (err) => {
+router.delete('/note/:id', (req, res) => {
+    // const {
+    //     _id
+    // } = req.body;
+    Note.findOneAndDelete(req.params.id, (err) => {
         if (err) {
             return res.send(err);
         }
